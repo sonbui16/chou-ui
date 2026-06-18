@@ -6,6 +6,7 @@ import { Toaster } from 'sonner'
 import { queryClient } from '@/lib/queryClient'
 import { AuthProvider } from '@/context/AuthProvider'
 import { CartProvider } from '@/context/CartProvider'
+import { PresenceTracker } from '@/components/PresenceTracker'
 import App from '@/App'
 import '@/index.css'
 
@@ -14,6 +15,7 @@ createRoot(document.getElementById('root')).render(
     <QueryClientProvider client={queryClient}>
       <BrowserRouter>
         <AuthProvider>
+          <PresenceTracker />
           <CartProvider>
             <App />
             <Toaster position="bottom-right" richColors toastOptions={{ style: { fontFamily: 'Inter' } }} />
