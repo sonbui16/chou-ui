@@ -31,3 +31,10 @@ export function rentalDays(startIso, endIso) {
   const ms = parseISO(endIso).getTime() - parseISO(startIso).getTime()
   return Math.max(1, Math.round(ms / 86_400_000) + 1)
 }
+
+export function isNewProduct(createdAt, days = 10) {
+  if (!createdAt) return false
+  const created = typeof createdAt === 'string' ? parseISO(createdAt) : createdAt
+  const ageDays = (Date.now() - created.getTime()) / 86_400_000
+  return ageDays >= 0 && ageDays < days
+}

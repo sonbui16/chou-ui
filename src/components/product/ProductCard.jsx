@@ -1,10 +1,11 @@
 import { Link } from 'react-router-dom'
 import { ImageWithFallback, RatingStars } from '@/components/ui/primitives'
-import { formatVnd } from '@/lib/format'
+import { formatVnd, isNewProduct } from '@/lib/format'
 import { cn } from '@/lib/cn'
 
 export function ProductCard({ product, featured = false }) {
   const soldOut = product.available_now === 0
+  const isNew = isNewProduct(product.created_at)
   return (
     <Link to={`/vay/${product.slug}`} className="group block" aria-label={product.name}>
       <div className={cn('relative overflow-hidden rounded-md bg-cream', featured ? 'aspect-[3/4]' : 'aspect-[4/5]')}>
@@ -16,6 +17,11 @@ export function ProductCard({ product, featured = false }) {
         <span className="absolute left-0 top-3 bg-background/90 px-2 py-1 font-mono text-[0.6rem] uppercase tracking-[0.2em] text-accent">
           {product.category?.name}
         </span>
+        {isNew && (
+          <span className="absolute left-0 top-10 bg-accent px-2 py-1 font-mono text-[0.6rem] uppercase tracking-[0.2em] text-background">
+            Mới
+          </span>
+        )}
         {soldOut && (
           <span className="absolute right-0 top-3 bg-ink/85 px-2 py-1 font-mono text-[0.6rem] uppercase tracking-[0.2em] text-background">
             Hết váy
