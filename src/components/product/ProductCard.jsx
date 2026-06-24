@@ -18,12 +18,12 @@ export function ProductCard({ product, featured = false }) {
           {product.category?.name}
         </span>
         {isNew && (
-          <span className="absolute left-0 top-10 bg-accent px-2 py-1 font-mono text-[0.6rem] uppercase tracking-[0.2em] text-background">
+          <span className="absolute left-0 top-10 bg-accent px-2 py-1 font-mono text-[0.6rem] uppercase tracking-[0.2em] text-ink-foreground">
             Mới
           </span>
         )}
         {soldOut && (
-          <span className="absolute right-0 top-3 bg-ink/85 px-2 py-1 font-mono text-[0.6rem] uppercase tracking-[0.2em] text-background">
+          <span className="absolute right-0 top-3 bg-ink/85 px-2 py-1 font-mono text-[0.6rem] uppercase tracking-[0.2em] text-ink-foreground">
             Hết váy
           </span>
         )}

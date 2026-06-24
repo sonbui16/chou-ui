@@ -60,7 +60,7 @@ export default function Account() {
                 const [label, tone] = STATUS[r.status]
                 return (
                   <Link key={r.id} to={`/tai-khoan/don/${r.rental_no}`}>
-                    <Card className="flex flex-wrap items-center justify-between gap-4 p-5 transition-colors hover:border-ink">
+                    <Card className="flex flex-wrap items-center justify-between gap-4 p-5 transition-colors hover:border-foreground">
                       <div>
                         <div className="flex items-center gap-3"><span className="font-mono text-sm">{r.rental_no}</span><Badge tone={tone}>{label}</Badge></div>
                         <p className="mt-1 text-sm text-muted-foreground">{r.items.map((i) => i.product_name).join(', ')}</p>

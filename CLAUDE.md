@@ -20,9 +20,9 @@ Tránh look mặc định kiểu AI (cream+serif+terracotta) và cả nền đen
 - Palette: trắng ấm `#FCFBF7`, kem `#F3ECDD`, be/cát `#E3D6C0`, champagne (nhấn) `#C2A878`,
   mực ấm cho chữ `#2E2A24`, taupe phụ `#9C8F7C`. Không dùng đen tuyền hay màu rực.
 - **Ánh sáng vàng nhẹ**: quầng gradient champagne dịu phía sau hero/ảnh; đường kẻ **hairline champagne**.
-- Type: serif tương phản cao, thanh mảnh (Playfair Display / Cormorant) cho tiêu đề + sans sạch
-  (Inter / Hanken Grotesk) cho body + mono (IBM Plex Mono) cho mã đơn/giá. Nhiều khoảng trắng,
-  tracking rộng, weight nhẹ; góc bo rất nhẹ (radius nhỏ).
+- Type: dùng **font mặc định của hệ thống** (không tải web font) — token trong `src/index.css`:
+  `--font-display` = system serif (`ui-serif, Georgia…`) cho tiêu đề, `--font-sans` = system-ui cho body,
+  `--font-mono` = system mono cho mã đơn/giá. Giữ vai trò serif/sans/mono, nhiều khoảng trắng, tracking rộng, radius nhỏ.
 - Signature: module đặt thuê dạng *"phiếu hẹn thử đồ"* (khung hairline champagne, mã mono) trên nền kem.
 - Map palette vào biến theme của shadcn (`--background`, `--primary`, `--accent`, …) thay vì màu mặc định.
 - Quality floor: responsive tới mobile, focus bàn phím rõ, tôn trọng `prefers-reduced-motion`.
@@ -54,6 +54,17 @@ Luồng gọi API: **page/component → `features/*` (hook) → `services/*` (h�
 Trang gom nhóm theo luồng: `pages/auth/` (Login, Register), `pages/catalog/` (Catalog, ProductDetail),
 `pages/checkout/` (Cart, Checkout, OrderConfirmation), `pages/account/` (Account, RentalDetail);
 Home/About/NotFound ở gốc `pages/`. Trang dùng import tuyệt đối `@/...` nên khai báo route trong `App.jsx` phải khớp đường dẫn nhóm.
+
+## Dark mode
+- Bật bằng class `.dark` trên `<html>`. Toàn bộ màu là CSS variable nên dark mode = override biến trong
+  block `.dark { … }` ở `src/index.css` (không dùng tiện ích `dark:` rải rác).
+- `src/components/ThemeToggle.jsx` (nút Moon/Sun ở header) toggle class + lưu localStorage key `chou:theme`;
+  `index.html` có script nhỏ áp theme **trước khi render** để tránh nháng (FOUC); mặc định theo `prefers-color-scheme`.
+- **Quy ước token nền tối**: chỗ cố tình nền tối + chữ sáng (footer, thanh thông báo, CTA, chip "đang chọn", badge)
+  dùng cặp **`bg-ink` + `text-ink-foreground`** — `--ink` tối và `--ink-foreground` sáng ở **cả hai** theme.
+  KHÔNG dùng `text-background` cho chữ-sáng-trên-nền-tối (nó đảo màu theo theme → mất chữ ở dark).
+- Nhấn "đang chọn"/emphasis dùng `border-foreground`/`text-foreground`/`ring-foreground` (KHÔNG `*-ink`), vì ở light mode
+  `--foreground` == `--ink` nên nhìn y hệt, còn dark mode tự sáng lên cho dễ thấy.
 
 ## Routing & xác thực (auth)
 - `App.jsx` chia rõ bằng comment `{/* Public routes */}` và `{/* Private routes */}`. Route private bọc trong

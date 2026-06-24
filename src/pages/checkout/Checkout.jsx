@@ -110,7 +110,7 @@ export default function Checkout() {
               {[{ v: 'pickup', label: 'Nhận tại atelier', desc: 'Đến thử và lấy trực tiếp', icon: Store },
                 { v: 'delivery', label: 'Giao tận nơi', desc: 'Ship nội thành', icon: Truck }].map((o) => (
                 <button key={o.v} onClick={() => setFulfillment(o.v)}
-                  className={cn('flex items-start gap-3 rounded-md border p-4 text-left', fulfillment === o.v ? 'border-ink bg-muted' : 'border-input hover:border-ink')}>
+                  className={cn('flex items-start gap-3 rounded-md border p-4 text-left', fulfillment === o.v ? 'border-foreground bg-muted' : 'border-input hover:border-foreground')}>
                   <o.icon className="mt-0.5 size-5 text-accent" />
                   <span><span className="block font-medium">{o.label}</span><span className="block text-xs text-muted-foreground">{o.desc}</span></span>
                 </button>
@@ -125,7 +125,7 @@ export default function Checkout() {
               {addresses.length > 0 && !adding && (
                 <div className="space-y-3">
                   {addresses.map((a) => (
-                    <label key={a.id} className={cn('flex cursor-pointer items-start gap-3 rounded-md border p-4', selectedAddr === a.id ? 'border-ink bg-muted' : 'border-input')}>
+                    <label key={a.id} className={cn('flex cursor-pointer items-start gap-3 rounded-md border p-4', selectedAddr === a.id ? 'border-foreground bg-muted' : 'border-input')}>
                       <input type="radio" name="addr" checked={selectedAddr === a.id} onChange={() => setAddressId(a.id)} className="mt-1 accent-[color:var(--ink)]" />
                       <span className="text-sm"><span className="font-medium">{a.recipient}</span> · {a.phone}
                         <span className="block text-muted-foreground">{[a.line1, a.ward, a.district, a.province].filter(Boolean).join(', ')}</span></span>
@@ -154,7 +154,7 @@ export default function Checkout() {
             <div className="grid grid-cols-2 gap-3 sm:grid-cols-4">
               {PAYMENTS.map((p) => (
                 <button key={p.value} onClick={() => setMethod(p.value)}
-                  className={cn('rounded-md border p-3 text-left', method === p.value ? 'border-ink bg-muted' : 'border-input hover:border-ink')}>
+                  className={cn('rounded-md border p-3 text-left', method === p.value ? 'border-foreground bg-muted' : 'border-input hover:border-foreground')}>
                   <span className="block text-sm font-medium">{p.label}</span>
                   <span className="block text-xs text-muted-foreground">{p.note}</span>
                 </button>

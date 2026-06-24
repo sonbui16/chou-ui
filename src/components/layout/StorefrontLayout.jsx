@@ -5,6 +5,7 @@ import { useCart } from '@/store/hooks'
 import { useAuth } from '@/store/hooks'
 import { useCategories } from '@/features/catalog'
 import { Drawer } from '@/components/ui/drawer'
+import { ThemeToggle } from '@/components/ThemeToggle'
 import { cn } from '@/lib/cn'
 
 const linkCls = ({ isActive }) =>
@@ -18,8 +19,8 @@ function Header() {
 
   return (
     <header className="sticky top-0 z-40 border-b border-border bg-background/85 backdrop-blur">
-      <div className="bg-ink text-background">
-        <p className="mx-auto max-w-7xl px-4 py-1.5 text-center font-mono text-[0.62rem] uppercase tracking-[0.25em]">
+      <div className="bg-ink text-ink-foreground">
+        <p className="mx-auto max-w-7xl px-4 py-1.5 text-center font-mono text-[0.82rem] uppercase tracking-[0.1em]">
           Miễn phí giao nội thành cho đơn từ 500.000₫ · Đặt giữ váy trước tới 90 ngày
         </p>
       </div>
@@ -39,6 +40,7 @@ function Header() {
           <NavLink to="/ve-chung-toi" className={linkCls}>Câu chuyện</NavLink>
         </nav>
         <div className="flex items-center gap-4">
+          <ThemeToggle />
           <Link to={user ? '/tai-khoan' : '/dang-nhap'} className="flex items-center gap-1.5 hover:text-accent" aria-label="Tài khoản">
             <User2 className="size-5" />
             <span className="hidden text-sm sm:inline">{user ? user.full_name.split(' ').slice(-1) : 'Đăng nhập'}</span>
@@ -69,18 +71,18 @@ function Header() {
 
 function Footer() {
   return (
-    <footer className="mt-24 border-t border-border bg-ink text-background">
+    <footer className="mt-24 border-t border-border bg-ink text-ink-foreground">
       <div className="mx-auto grid max-w-7xl gap-10 px-4 py-14 md:grid-cols-4">
         <div className="md:col-span-2">
           <p className="font-[var(--font-display)] text-3xl">Chou Dress</p>
-          <p className="mt-3 max-w-sm text-sm text-background/70">
+          <p className="mt-3 max-w-sm text-sm text-ink-foreground/70">
             Atelier cho thuê váy cưới, dạ hội và áo dài. Mỗi lần thuê là một buổi hẹn thử đồ riêng tư,
             chuẩn bị chu đáo cho khoảnh khắc của bạn.
           </p>
         </div>
         <div>
           <p className="eyebrow mb-3">Khám phá</p>
-          <ul className="space-y-2 text-sm text-background/80">
+          <ul className="space-y-2 text-sm text-ink-foreground/80">
             <li><Link to="/vay" className="hover:text-accent">Tất cả váy</Link></li>
             <li><Link to="/vay?cat=vay-cuoi" className="hover:text-accent">Váy cưới</Link></li>
             <li><Link to="/ve-chung-toi" className="hover:text-accent">Câu chuyện</Link></li>
@@ -88,15 +90,15 @@ function Footer() {
         </div>
         <div>
           <p className="eyebrow mb-3">Liên hệ</p>
-          <ul className="space-y-2 text-sm text-background/80">
+          <ul className="space-y-2 text-sm text-ink-foreground/80">
             <li>128 Nguyễn Huệ, Quận 1, TP.HCM</li>
             <li>0900 000 000 · hello@chou.vn</li>
             <li>9:00 – 20:00 mỗi ngày</li>
           </ul>
         </div>
       </div>
-      <div className="border-t border-background/15">
-        <p className="mx-auto max-w-7xl px-4 py-5 font-mono text-[0.62rem] uppercase tracking-[0.2em] text-background/50">
+      <div className="border-t border-ink-foreground/15">
+        <p className="mx-auto max-w-7xl px-4 py-5 font-mono text-[0.62rem] uppercase tracking-[0.2em] text-ink-foreground/50">
           © 2026 Chou Dress
         </p>
       </div>

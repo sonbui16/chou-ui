@@ -108,7 +108,7 @@ export default function ProductDetail() {
           <div className="flex gap-3 sm:flex-col">
             {images.map((img, i) => (
               <button key={img.id} onClick={() => setActiveImg(i)} aria-label={`Ảnh ${i + 1}`}
-                className={cn('size-16 overflow-hidden rounded-md border', activeImg === i ? 'border-ink' : 'border-border')}>
+                className={cn('size-16 overflow-hidden rounded-md border', activeImg === i ? 'border-foreground' : 'border-border')}>
                 <ImageWithFallback src={img.url} alt={img.alt || product.name} className="size-full" />
               </button>
             ))}
@@ -146,7 +146,7 @@ export default function ProductDetail() {
                 <div className="flex flex-wrap gap-2">
                   {productColors.map((c) => (
                     <button key={c.id} onClick={() => setColorId(c.id)} title={c.name} aria-label={c.name}
-                      className={cn('flex size-9 items-center justify-center rounded-full border', colorId === c.id ? 'border-ink ring-1 ring-ink ring-offset-2' : 'border-input')}>
+                      className={cn('flex size-9 items-center justify-center rounded-full border', colorId === c.id ? 'border-foreground ring-1 ring-foreground ring-offset-2' : 'border-input')}>
                       <span className="size-6 rounded-full border border-border" style={{ background: c.hex }} />
                     </button>
                   ))}
@@ -159,7 +159,7 @@ export default function ProductDetail() {
                     const ok = sizeOkForColor(s.id)
                     return (
                       <button key={s.id} disabled={!ok} onClick={() => setSizeId(s.id)} aria-pressed={sizeId === s.id}
-                        className={cn('min-w-12 rounded-md border px-3 py-2 text-sm', sizeId === s.id ? 'border-ink bg-ink text-background' : 'border-input hover:border-ink', !ok && 'cursor-not-allowed text-muted-foreground/40 line-through')}>
+                        className={cn('min-w-12 rounded-md border px-3 py-2 text-sm', sizeId === s.id ? 'border-foreground bg-ink text-ink-foreground' : 'border-input hover:border-foreground', !ok && 'cursor-not-allowed text-muted-foreground/40 line-through')}>
                         {s.code}
                       </button>
                     )

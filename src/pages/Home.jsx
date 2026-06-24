@@ -71,8 +71,8 @@ export default function Home() {
                 <ImageWithFallback src={sample?.primary_image} alt={c.name} className="size-full transition-transform duration-700 group-hover:scale-105" />
                 <div className="absolute inset-0 bg-gradient-to-t from-ink/70 to-transparent" />
                 <div className="absolute bottom-0 left-0 p-4">
-                  <p className="font-[var(--font-display)] text-2xl text-background">{c.name}</p>
-                  <span className="mt-1 inline-flex items-center gap-1 text-xs text-background/80">Khám phá <ArrowRight className="size-3" /></span>
+                  <p className="font-[var(--font-display)] text-2xl text-ink-foreground">{c.name}</p>
+                  <span className="mt-1 inline-flex items-center gap-1 text-xs text-ink-foreground/80">Khám phá <ArrowRight className="size-3" /></span>
                 </div>
               </Link>
             )
@@ -119,9 +119,9 @@ export default function Home() {
       </section>
 
       {/* CTA */}
-      <section className="bg-ink text-background">
+      <section className="bg-ink text-ink-foreground">
         <div className="mx-auto flex max-w-7xl flex-col items-center gap-6 px-4 py-20 text-center">
-          <h2 className="max-w-2xl text-4xl text-background md:text-5xl">Ngày trọng đại xứng đáng với bộ váy hoàn hảo</h2>
+          <h2 className="max-w-2xl text-4xl text-ink-foreground md:text-5xl">Ngày trọng đại xứng đáng với bộ váy hoàn hảo</h2>
           <LinkButton to="/vay" variant="accent" size="lg">Bắt đầu chọn váy <ArrowRight className="size-4" /></LinkButton>
         </div>
       </section>

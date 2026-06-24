@@ -64,7 +64,7 @@ export default function Catalog() {
             <button
               key={s.id}
               onClick={() => { setSizeId(sizeId === String(s.id) ? '' : String(s.id)); setPage(1) }}
-              className={cn('min-w-11 rounded-md border px-3 py-1.5 text-sm', String(s.id) === sizeId ? 'border-ink bg-ink text-background' : 'border-input hover:border-ink')}
+              className={cn('min-w-11 rounded-md border px-3 py-1.5 text-sm', String(s.id) === sizeId ? 'border-foreground bg-ink text-ink-foreground' : 'border-input hover:border-foreground')}
             >
               {s.code}
             </button>
@@ -80,7 +80,7 @@ export default function Catalog() {
               onClick={() => { setColorId(colorId === String(c.id) ? '' : String(c.id)); setPage(1) }}
               title={c.name}
               aria-label={c.name}
-              className={cn('flex size-9 items-center justify-center rounded-full border', String(c.id) === colorId ? 'border-ink ring-1 ring-ink ring-offset-2' : 'border-input')}
+              className={cn('flex size-9 items-center justify-center rounded-full border', String(c.id) === colorId ? 'border-foreground ring-1 ring-foreground ring-offset-2' : 'border-input')}
             >
               <span className="size-6 rounded-full border border-border" style={{ background: c.hex }} />
             </button>
@@ -103,9 +103,9 @@ export default function Catalog() {
         <p className="eyebrow mb-2">Bộ sưu tập</p>
         <h1 className="text-4xl md:text-5xl">{activeCat ? activeCat.name : 'Tất cả váy'}</h1>
         <div className="mt-5 flex flex-wrap gap-2">
-          <button onClick={() => setCat('')} className={cn('rounded-md border px-4 py-1.5 text-sm', !cat ? 'border-ink bg-ink text-background' : 'border-input hover:border-ink')}>Tất cả</button>
+          <button onClick={() => setCat('')} className={cn('rounded-md border px-4 py-1.5 text-sm', !cat ? 'border-foreground bg-ink text-ink-foreground' : 'border-input hover:border-foreground')}>Tất cả</button>
           {categories.map((c) => (
-            <button key={c.id} onClick={() => setCat(c.slug)} className={cn('rounded-md border px-4 py-1.5 text-sm', cat === c.slug ? 'border-ink bg-ink text-background' : 'border-input hover:border-ink')}>{c.name}</button>
+            <button key={c.id} onClick={() => setCat(c.slug)} className={cn('rounded-md border px-4 py-1.5 text-sm', cat === c.slug ? 'border-foreground bg-ink text-ink-foreground' : 'border-input hover:border-foreground')}>{c.name}</button>
           ))}
         </div>
       </div>
@@ -141,7 +141,7 @@ export default function Catalog() {
             <div className="mt-12 flex items-center justify-center gap-1">
               {Array.from({ length: pageCount }, (_, i) => i + 1).map((p) => (
                 <button key={p} onClick={() => setPage(p)} aria-current={p === page}
-                  className={cn('size-9 rounded-md border font-mono text-sm', p === page ? 'border-ink bg-ink text-background' : 'border-input hover:border-ink')}>
+                  className={cn('size-9 rounded-md border font-mono text-sm', p === page ? 'border-foreground bg-ink text-ink-foreground' : 'border-input hover:border-foreground')}>
                   {p}
                 </button>
               ))}
