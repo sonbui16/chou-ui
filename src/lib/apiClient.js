@@ -1,4 +1,5 @@
-const BASE_URL = import.meta.env.VITE_API_URL ?? 'http://localhost:4000/api'
+import http from '@/utils/http'
+
 const TOKEN_KEY = 'chou:token'
 
 export function getToken() {
@@ -42,29 +43,29 @@ export async function apiFetch(path, { method = 'GET', body, auth = false, signa
   const token = getToken()
   if (token) headers.Authorization = `Bearer ${token}`
 
-  const res = await fetch(`${BASE_URL}${path}`, {
-    method,
-    headers,
-    body: body !== undefined ? JSON.stringify(body) : undefined,
-    signal,
-  })
+  const verb = method.toLowerCase()
+  const config = { headers, signal }
 
-  if (res.status === 204) return null
-
-  let data = null
   try {
-    data = await res.json()
-  } catch {
-    /* không có body */
-  }
+    let data
+    if (verb === 'get') data = await http.get(path, config)
+    else if (verb === 'delete') data = await http.del(path, config)
+    else data = await http[verb](path, body, config)
 
-  if (!res.ok) {
-    const err = data?.error ?? {}
-    if (res.status === 401) {
-      clearToken()
-      window.dispatchEvent(new CustomEvent('chou:unauthorized'))
+    // 204 / body trống -> null (giữ đúng hành vi cũ)
+    return data === '' || data === undefined ? null : data
+  } catch (e) {
+    // Lỗi do server trả về (non-2xx)
+    if (e?.response) {
+      const status = e.response.status
+      const err = e.response.data?.error ?? {}
+      if (status === 401) {
+        clearToken()
+        window.dispatchEvent(new CustomEvent('chou:unauthorized'))
+      }
+      throw new ApiError(status, err.code, err.message)
     }
-    throw new ApiError(res.status, err.code, err.message)
+    // Lỗi mạng / huỷ request -> giữ nguyên để caller (vd React Query) xử lý
+    throw e
   }
-  return data
 }
