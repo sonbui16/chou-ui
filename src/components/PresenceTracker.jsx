@@ -1,7 +1,7 @@
 import { useEffect } from 'react'
-import { useLocation } from 'react-router-dom'
-import { useAuth } from '@/context/AuthProvider'
-import { sendPresence } from '@/lib/presence'
+import { useLocation } from 'react-router'
+import { useAuth } from '@/store/hooks'
+import { sendPresence } from '@/services/presence'
 
 const HEARTBEAT_MS = 30 * 1000
 

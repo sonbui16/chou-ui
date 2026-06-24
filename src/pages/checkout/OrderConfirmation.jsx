@@ -1,6 +1,6 @@
-import { Link, useParams } from 'react-router-dom'
+import { Link, useParams } from 'react-router'
 import { CalendarDays, CheckCircle2, Store, Truck } from 'lucide-react'
-import { useRental } from '@/api/account'
+import { useRental } from '@/features/account'
 import { LinkButton } from '@/components/ui/button'
 import { Badge, Spinner } from '@/components/ui/primitives'
 import { formatDate, formatVnd } from '@/lib/format'

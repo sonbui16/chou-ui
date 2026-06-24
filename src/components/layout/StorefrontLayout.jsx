@@ -1,9 +1,9 @@
 import { useEffect, useState } from 'react'
-import { Link, NavLink, Outlet, useLocation } from 'react-router-dom'
+import { Link, NavLink, Outlet, useLocation } from 'react-router'
 import { Menu, ShoppingBag, User2 } from 'lucide-react'
-import { useCart } from '@/context/CartProvider'
-import { useAuth } from '@/context/AuthProvider'
-import { useCategories } from '@/api/catalog'
+import { useCart } from '@/store/hooks'
+import { useAuth } from '@/store/hooks'
+import { useCategories } from '@/features/catalog'
 import { Drawer } from '@/components/ui/drawer'
 import { cn } from '@/lib/cn'
 

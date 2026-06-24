@@ -1,4 +1,4 @@
-import { Link } from 'react-router-dom'
+import { Link } from 'react-router'
 import { ImageWithFallback, RatingStars } from '@/components/ui/primitives'
 import { formatVnd, isNewProduct } from '@/lib/format'
 import { cn } from '@/lib/cn'

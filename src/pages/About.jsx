@@ -1,4 +1,4 @@
-import { useProducts } from '@/api/catalog'
+import { useProducts } from '@/features/catalog'
 import { LinkButton } from '@/components/ui/button'
 import { SectionHeading, ImageWithFallback } from '@/components/ui/primitives'
 

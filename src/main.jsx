@@ -1,27 +1,30 @@
 import { StrictMode } from 'react'
 import { createRoot } from 'react-dom/client'
-import { BrowserRouter } from 'react-router-dom'
+import { BrowserRouter } from 'react-router'
 import { QueryClientProvider } from '@tanstack/react-query'
+import { Provider } from 'react-redux'
+import { PersistGate } from 'redux-persist/integration/react'
 import { Toaster } from 'sonner'
 import { queryClient } from '@/lib/queryClient'
-import { AuthProvider } from '@/context/AuthProvider'
-import { CartProvider } from '@/context/CartProvider'
+import { store, persistor } from '@/store'
+import { AuthBootstrap } from '@/store/AuthBootstrap'
 import { PresenceTracker } from '@/components/PresenceTracker'
 import App from '@/App'
 import '@/index.css'
 
 createRoot(document.getElementById('root')).render(
   <StrictMode>
-    <QueryClientProvider client={queryClient}>
-      <BrowserRouter>
-        <AuthProvider>
-          <PresenceTracker />
-          <CartProvider>
+    <Provider store={store}>
+      <PersistGate loading={null} persistor={persistor}>
+        <QueryClientProvider client={queryClient}>
+          <BrowserRouter>
+            <AuthBootstrap />
+            <PresenceTracker />
             <App />
             <Toaster position="bottom-right" richColors toastOptions={{ style: { fontFamily: 'Inter' } }} />
-          </CartProvider>
-        </AuthProvider>
-      </BrowserRouter>
-    </QueryClientProvider>
+          </BrowserRouter>
+        </QueryClientProvider>
+      </PersistGate>
+    </Provider>
   </StrictMode>,
 )

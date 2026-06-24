@@ -1,5 +1,10 @@
 import { apiFetch } from '@/lib/apiClient'
 
+/**
+ * Service theo dõi hiện diện (presence) — gửi heartbeat lên API.
+ * Tự quản visitor/session id trong localStorage. Hook UI: `@/components/PresenceTracker`.
+ */
+
 const VISITOR_KEY = 'chou:presence:visitor'
 const SESSION_KEY = 'chou:presence:session'
 const LAST_ACTIVE_KEY = 'chou:presence:last-active'

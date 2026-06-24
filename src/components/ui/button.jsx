@@ -1,5 +1,5 @@
 import { forwardRef } from 'react'
-import { Link } from 'react-router-dom'
+import { Link } from 'react-router'
 import { cva } from 'class-variance-authority'
 import { cn } from '@/lib/cn'
 

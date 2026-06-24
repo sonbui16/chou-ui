@@ -1,6 +1,6 @@
-import { Link } from 'react-router-dom'
+import { Link } from 'react-router'
 import { ArrowRight, CalendarHeart, Sparkles, Truck, Undo2 } from 'lucide-react'
-import { useProducts, useCategories } from '@/api/catalog'
+import { useProducts, useCategories } from '@/features/catalog'
 import { ProductCard } from '@/components/product/ProductCard'
 import { LinkButton } from '@/components/ui/button'
 import { SectionHeading, ImageWithFallback, Skeleton } from '@/components/ui/primitives'
