@@ -8,7 +8,9 @@ Là một trong 3 phần của `chou-dress/`: **`chou-ui`** (storefront — đan
 - **Vite + React + JavaScript (KHÔNG dùng TypeScript)** — file dùng đuôi `.jsx`, không `.tsx`/`.ts`.
 - **Tailwind CSS v4** (tokens trong `@theme` của `src/index.css`), **shadcn/ui** cho component
   (skill `shadcn` đã cài trong `.agents/skills/`).
-- Routing: `react-router-dom`. Form: `react-hook-form` + `zod`. Icon: `lucide-react`.
+- Routing: **`react-router` v7** (KHÔNG dùng `react-router-dom` — v7 đã hợp nhất, import mọi thứ
+  `BrowserRouter`/`Routes`/`Link`/`useNavigate`… từ `'react-router'`). Form: `react-hook-form` + `zod`. Icon: `lucide-react`.
+- State toàn cục: **Redux Toolkit + redux-persist** (xem mục Kiến trúc). Data fetching: **@tanstack/react-query**.
 - Lệnh: `npm run dev` (http://localhost:5173), `npm run build` (vite build) phải chạy không lỗi;
   lint bằng ESLint nếu có cấu hình.
 
@@ -53,7 +55,31 @@ Trang gom nhóm theo luồng: `pages/auth/` (Login, Register), `pages/catalog/` 
 `pages/checkout/` (Cart, Checkout, OrderConfirmation), `pages/account/` (Account, RentalDetail);
 Home/About/NotFound ở gốc `pages/`. Trang dùng import tuyệt đối `@/...` nên khai báo route trong `App.jsx` phải khớp đường dẫn nhóm.
 
+## Routing & xác thực (auth)
+- `App.jsx` chia rõ bằng comment `{/* Public routes */}` và `{/* Private routes */}`. Route private bọc trong
+  `<ProtectedRoute>` (`src/routes/ProtectedRoute.jsx`): đang `loading` → spinner; chưa đăng nhập → `Navigate` về `/dang-nhap`
+  kèm `state.from` để quay lại sau khi login. Private: `/thanh-toan`, `/dat-hang/:rentalNo`, `/tai-khoan`, `/tai-khoan/don/:rentalNo`.
+- **Chỉ có 1 access token, CHƯA có refresh token.** Token lưu localStorage key `chou:token` (qua `lib/apiClient`),
+  mỗi request gắn `Authorization: Bearer`. Token hết hạn / gặp **401** → `clearToken()` + phát sự kiện `chou:unauthorized`
+  → `AuthBootstrap` đăng xuất (đẩy về đăng nhập). Khôi phục phiên khi tải trang bằng `GET /auth/me`, KHÔNG phải bằng refresh.
+  → Khi nào thêm refresh token cần phối hợp `chou-api` (endpoint `/auth/refresh` + lưu refresh token, nên dùng httpOnly cookie).
+
+## Validate form
+- Dùng **`zod` + `react-hook-form` + `@hookform/resolvers`** (`zodResolver`): khai báo `schema = z.object({...})` rồi
+  `useForm({ resolver: zodResolver(schema) })`. Hiện áp dụng ở `pages/auth/Login.jsx` và `Register.jsx`;
+  form khác (vd Checkout) chưa validate — khi thêm hãy theo đúng pattern này.
+
+## Error boundary
+- `src/components/ErrorBoundary.jsx` — **class component** (error boundary bắt buộc là class: `getDerivedStateFromError`
+  + `componentDidCatch`), bọc quanh `<App />` trong `main.jsx`. Lỗi **render** runtime → màn fallback tiếng Việt
+  (nút "Thử lại" reset state, "Về trang chủ"); dev hiện `error.message`. `AuthBootstrap`/`PresenceTracker`/`Toaster`
+  đặt NGOÀI boundary để vẫn chạy nếu App crash.
+- Boundary KHÔNG bắt: lỗi trong event handler, code bất đồng bộ (fetch/setTimeout), hay lỗi từ chính nó.
+  Lỗi API vẫn do React Query + `ApiError` xử lý riêng.
+
 ## Cạm bẫy đã gặp
-- Store dùng `useSyncExternalStore`: **`getSnapshot` phải trả tham chiếu ổn định** (cả state),
-  selector áp dụng *sau* khi lấy snapshot — trả mảng mới trong `getSnapshot` gây render-loop vô hạn.
+- Redux-persist: chỉ persist `cart` (key `chou:cart`), KHÔNG persist `auth`; nhớ bỏ qua các action persist
+  (`FLUSH/REHYDRATE/…`) khỏi `serializableCheck` ở `configureStore` để tránh cảnh báo.
+- Đổi cơ chế lưu giỏ hàng (localStorage thủ công → redux-persist) làm format khác nhau, nên giỏ hàng cũ của
+  người dùng sẽ trống lần đầu sau khi cập nhật — bình thường.
 - Ảnh sản phẩm cần **fallback** khi URL ngoài lỗi để không vỡ layout.

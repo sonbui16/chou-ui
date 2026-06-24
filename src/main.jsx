@@ -9,6 +9,7 @@ import { queryClient } from '@/lib/queryClient'
 import { store, persistor } from '@/store'
 import { AuthBootstrap } from '@/store/AuthBootstrap'
 import { PresenceTracker } from '@/components/PresenceTracker'
+import { ErrorBoundary } from '@/components/ErrorBoundary'
 import App from '@/App'
 import '@/index.css'
 
@@ -20,7 +21,9 @@ createRoot(document.getElementById('root')).render(
           <BrowserRouter>
             <AuthBootstrap />
             <PresenceTracker />
-            <App />
+            <ErrorBoundary>
+              <App />
+            </ErrorBoundary>
             <Toaster position="bottom-right" richColors toastOptions={{ style: { fontFamily: 'Inter' } }} />
           </BrowserRouter>
         </QueryClientProvider>

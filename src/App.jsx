@@ -18,6 +18,7 @@ export default function App() {
   return (
     <Routes>
       <Route element={<StorefrontLayout />}>
+        {/* Public routes */}
         <Route path="/" element={<Home />} />
         <Route path="/vay" element={<Catalog />} />
         <Route path="/vay/:slug" element={<ProductDetail />} />
@@ -25,10 +26,13 @@ export default function App() {
         <Route path="/ve-chung-toi" element={<About />} />
         <Route path="/dang-nhap" element={<Login />} />
         <Route path="/dang-ky" element={<Register />} />
+
+        {/* Private routes */}
         <Route path="/thanh-toan" element={<ProtectedRoute><Checkout /></ProtectedRoute>} />
         <Route path="/dat-hang/:rentalNo" element={<ProtectedRoute><OrderConfirmation /></ProtectedRoute>} />
         <Route path="/tai-khoan" element={<ProtectedRoute><Account /></ProtectedRoute>} />
         <Route path="/tai-khoan/don/:rentalNo" element={<ProtectedRoute><RentalDetail /></ProtectedRoute>} />
+
         <Route path="*" element={<NotFound />} />
       </Route>
     </Routes>
