@@ -1,6 +1,6 @@
 import { useCallback } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-import { setToken, clearToken } from '@/lib/apiClient'
+import { setToken, setRefresh, clearTokens } from '@/lib/apiClient'
 import * as authService from '@/services/auth'
 import { selectUser, selectAuthLoading, setUser, clearUser } from './authSlice'
 import { addItem, removeItem, clearCart, selectCartItems } from './cartSlice'
@@ -18,6 +18,7 @@ export function useAuth() {
     async (email, password) => {
       const data = await authService.login({ email, password })
       setToken(data.token)
+      setRefresh(data.refresh_token)
       dispatch(setUser(data.user))
       return data.user
     },
@@ -28,6 +29,7 @@ export function useAuth() {
     async (payload) => {
       const data = await authService.register(payload)
       setToken(data.token)
+      setRefresh(data.refresh_token)
       dispatch(setUser(data.user))
       return data.user
     },
@@ -35,7 +37,8 @@ export function useAuth() {
   )
 
   const logout = useCallback(() => {
-    clearToken()
+    authService.logout().catch(() => {}) // thu hồi refresh token phía server (best-effort)
+    clearTokens()
     dispatch(clearUser())
   }, [dispatch])
 

@@ -1,6 +1,7 @@
 import http from '@/utils/http'
 
 const TOKEN_KEY = 'chou:token'
+const REFRESH_KEY = 'chou:refresh'
 
 export function getToken() {
   try {
@@ -16,13 +17,31 @@ export function setToken(token) {
     /* ignore */
   }
 }
-export function clearToken() {
+export function getRefresh() {
   try {
-    localStorage.removeItem(TOKEN_KEY)
+    return localStorage.getItem(REFRESH_KEY)
+  } catch {
+    return null
+  }
+}
+export function setRefresh(token) {
+  try {
+    if (token) localStorage.setItem(REFRESH_KEY, token)
   } catch {
     /* ignore */
   }
 }
+/** Xoá cả access lẫn refresh token. */
+export function clearTokens() {
+  try {
+    localStorage.removeItem(TOKEN_KEY)
+    localStorage.removeItem(REFRESH_KEY)
+  } catch {
+    /* ignore */
+  }
+}
+// Tương thích ngược: clearToken cũ giờ xoá cả hai.
+export const clearToken = clearTokens
 
 /** Lỗi API có status + code để UI hiển thị thông điệp phù hợp. */
 export class ApiError extends Error {
@@ -33,11 +52,14 @@ export class ApiError extends Error {
   }
 }
 
-/**
- * Gọi API. `path` bắt đầu bằng '/'. Tự gắn Bearer token nếu có.
- * 401 -> xoá token + phát sự kiện để app điều hướng về đăng nhập.
- */
-export async function apiFetch(path, { method = 'GET', body, auth = false, signal } = {}) {
+/** Bóc envelope { status, data } của chou-api; 204/body trống -> null. */
+function unwrap(data) {
+  if (data && typeof data === 'object' && data.status === 'success') return data.data ?? null
+  return data === '' || data === undefined ? null : data
+}
+
+/** Gửi request thật (gắn Bearer access token + bóc envelope). Ném lỗi axios khi non-2xx. */
+async function rawSend(path, { method = 'GET', body, signal } = {}) {
   const headers = {}
   if (body !== undefined) headers['Content-Type'] = 'application/json'
   const token = getToken()
@@ -46,26 +68,71 @@ export async function apiFetch(path, { method = 'GET', body, auth = false, signa
   const verb = method.toLowerCase()
   const config = { headers, signal }
 
-  try {
-    let data
-    if (verb === 'get') data = await http.get(path, config)
-    else if (verb === 'delete') data = await http.del(path, config)
-    else data = await http[verb](path, body, config)
+  let data
+  if (verb === 'get') data = await http.get(path, config)
+  else if (verb === 'delete') data = await http.del(path, config)
+  else data = await http[verb](path, body, config)
+  return unwrap(data)
+}
 
-    // 204 / body trống -> null (giữ đúng hành vi cũ)
-    return data === '' || data === undefined ? null : data
+// Single-flight: nhiều request 401 cùng lúc chỉ gọi /auth/refresh một lần.
+let refreshing = null
+async function tryRefresh() {
+  const refresh_token = getRefresh()
+  if (!refresh_token) return false
+  if (!refreshing) {
+    refreshing = http
+      .post('/auth/refresh', { refresh_token })
+      .then((res) => {
+        const payload = res?.status === 'success' ? res.data : res // bóc envelope
+        if (!payload?.token) return false
+        setToken(payload.token)
+        setRefresh(payload.refresh_token)
+        return true
+      })
+      .catch(() => false)
+  }
+  const ok = await refreshing
+  refreshing = null
+  return ok
+}
+
+const NO_REFRESH = /\/auth\/(refresh|login|register)$/
+
+/**
+ * Gọi API. `path` bắt đầu bằng '/'. Tự gắn Bearer token nếu có.
+ * Khi 401 và có refresh token -> tự gọi /auth/refresh rồi thử lại 1 lần.
+ * Thất bại -> xoá token + phát sự kiện để app điều hướng về đăng nhập.
+ */
+export async function apiFetch(path, options = {}) {
+  try {
+    return await rawSend(path, options)
   } catch (e) {
-    // Lỗi do server trả về (non-2xx)
-    if (e?.response) {
-      const status = e.response.status
-      const err = e.response.data?.error ?? {}
-      if (status === 401) {
-        clearToken()
-        window.dispatchEvent(new CustomEvent('chou:unauthorized'))
+    if (!e?.response) throw e // lỗi mạng / huỷ request
+
+    if (e.response.status === 401 && !NO_REFRESH.test(path) && getRefresh()) {
+      const ok = await tryRefresh()
+      if (ok) {
+        try {
+          return await rawSend(path, options)
+        } catch (e2) {
+          if (!e2?.response) throw e2
+          if (e2.response.status === 401) {
+            clearTokens()
+            window.dispatchEvent(new CustomEvent('chou:unauthorized'))
+          }
+          const err2 = e2.response.data?.error ?? {}
+          throw new ApiError(e2.response.status, err2.code, err2.message)
+        }
       }
-      throw new ApiError(status, err.code, err.message)
     }
-    // Lỗi mạng / huỷ request -> giữ nguyên để caller (vd React Query) xử lý
-    throw e
+
+    const status = e.response.status
+    const err = e.response.data?.error ?? {}
+    if (status === 401) {
+      clearTokens()
+      window.dispatchEvent(new CustomEvent('chou:unauthorized'))
+    }
+    throw new ApiError(status, err.code, err.message)
   }
 }

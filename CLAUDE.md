@@ -94,3 +94,14 @@ Home/About/NotFound ở gốc `pages/`. Trang dùng import tuyệt đối `@/...
 - Đổi cơ chế lưu giỏ hàng (localStorage thủ công → redux-persist) làm format khác nhau, nên giỏ hàng cũ của
   người dùng sẽ trống lần đầu sau khi cập nhật — bình thường.
 - Ảnh sản phẩm cần **fallback** khi URL ngoài lỗi để không vỡ layout.
+
+Cài đặt docker
+1. biết Docker là gì ?
+2. Cài đặt Docker, đăng ký Docker Hub
+- Ubuntu : sudo apt install docker.io -y
+3. Viết Dockerfile
+
+Quy trình làm việc với Docker
+1. Tìm và xây dựng "Image"
+docker images: hiển thị các image
+2. lên trên hub.docker tìm image:ví dụ tìm nginnx(chú ý lấy hàng official).bấm vào chuyển sang mục Tag
