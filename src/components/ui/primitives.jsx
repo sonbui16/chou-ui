@@ -1,6 +1,38 @@
-import { useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { Star } from 'lucide-react'
 import { cn } from '@/lib/cn'
+
+/* Reveal-on-scroll: phần tử mờ + trượt lên nhẹ khi cuộn vào tầm nhìn (chạy 1 lần).
+   Tự tôn trọng prefers-reduced-motion qua @media toàn cục trong index.css. */
+export function Reveal({ as: Tag = 'div', delay = 0, className, children, ...props }) {
+  const ref = useRef(null)
+  useEffect(() => {
+    const el = ref.current
+    if (!el) return
+    if (typeof IntersectionObserver === 'undefined') {
+      el.classList.add('is-visible')
+      return
+    }
+    const io = new IntersectionObserver(
+      (entries, obs) => {
+        for (const e of entries) {
+          if (e.isIntersecting) {
+            e.target.classList.add('is-visible')
+            obs.unobserve(e.target)
+          }
+        }
+      },
+      { threshold: 0.12, rootMargin: '0px 0px -10% 0px' },
+    )
+    io.observe(el)
+    return () => io.disconnect()
+  }, [])
+  return (
+    <Tag ref={ref} className={cn('reveal', className)} style={{ '--reveal-delay': `${delay}ms` }} {...props}>
+      {children}
+    </Tag>
+  )
+}
 
 /* Card */
 export function Card({ className, ...props }) {

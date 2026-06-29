@@ -166,6 +166,20 @@
 }
 .animate-fade-up { animation: fade-up 0.6s cubic-bezier(0.22, 1, 0.36, 1) both; }
 
+/* Reveal-on-scroll — phần tử mờ + trượt lên nhẹ khi vào tầm nhìn (xem component Reveal).
+   prefers-reduced-motion (ở trên) ép duration ~0 → vẫn hiện đủ nội dung, không chuyển động. */
+.reveal {
+  opacity: 0;
+  transform: translateY(16px);
+  transition: opacity 0.6s cubic-bezier(0.22, 1, 0.36, 1), transform 0.6s cubic-bezier(0.22, 1, 0.36, 1);
+  transition-delay: var(--reveal-delay, 0ms);
+  will-change: opacity, transform;
+}
+.reveal.is-visible {
+  opacity: 1;
+  transform: none;
+}
+
 /* react-day-picker */
 .rdp-root {
   --rdp-accent-color: var(--ink);

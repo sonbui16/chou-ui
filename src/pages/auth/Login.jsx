@@ -4,6 +4,7 @@ import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { z } from 'zod'
 import { useAuth } from '@/store/hooks'
+import { getRememberedEmail, setRememberedEmail } from '@/lib/apiClient'
 import { toast } from 'sonner'
 import { Button } from '@/components/ui/button'
 import { Field, Input } from '@/components/ui/input'
@@ -18,12 +19,17 @@ export default function Login() {
   const navigate = useNavigate()
   const location = useLocation()
   const [serverError, setServerError] = useState(null)
-  const { register, handleSubmit, formState: { errors, isSubmitting } } = useForm({ resolver: zodResolver(schema) })
+  const [remember, setRemember] = useState(true)   // mặc định: lưu tài khoản
+  const { register, handleSubmit, formState: { errors, isSubmitting } } = useForm({
+    resolver: zodResolver(schema),
+    defaultValues: { email: getRememberedEmail() },   // tự điền email đã lưu
+  })
 
   const onSubmit = async ({ email, password }) => {
     setServerError(null)
     try {
       await login(email, password)
+      setRememberedEmail(remember ? email : '')   // lưu email nếu chọn, ngược lại xoá
       toast.success('Đăng nhập thành công')
       navigate(location.state?.from ?? '/tai-khoan')
     } catch (e) {
@@ -42,6 +48,15 @@ export default function Login() {
       <form onSubmit={handleSubmit(onSubmit)} className="mt-8 space-y-4" noValidate>
         <Field label="Email" error={errors.email?.message}><Input type="email" placeholder="ban@email.com" {...register('email')} /></Field>
         <Field label="Mật khẩu" error={errors.password?.message}><Input type="password" placeholder="••••••••" {...register('password')} /></Field>
+        <label className="flex cursor-pointer select-none items-center gap-2 text-sm text-muted-foreground">
+          <input
+            type="checkbox"
+            checked={remember}
+            onChange={(e) => setRemember(e.target.checked)}
+            className="size-4 cursor-pointer accent-[color:var(--accent)]"
+          />
+          Lưu tài khoản
+        </label>
         {serverError && <p className="text-sm text-destructive">{serverError}</p>}
         <Button type="submit" className="w-full" size="lg" disabled={isSubmitting}>{isSubmitting ? 'Đang đăng nhập…' : 'Đăng nhập'}</Button>
       </form>

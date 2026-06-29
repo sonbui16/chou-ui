@@ -8,7 +8,7 @@ import { toast } from 'sonner'
 import { DateRangePicker } from '@/components/booking/DateRangePicker'
 import { PriceSummary } from '@/components/booking/PriceSummary'
 import { Button, LinkButton } from '@/components/ui/button'
-import { Badge, RatingStars, ImageWithFallback, Skeleton, EmptyState } from '@/components/ui/primitives'
+import { Badge, RatingStars, ImageWithFallback, Skeleton, EmptyState, Reveal } from '@/components/ui/primitives'
 import { computeTotals } from '@/lib/pricing'
 import { formatVnd, formatDate, toIsoDate } from '@/lib/format'
 import { cn } from '@/lib/cn'
@@ -190,11 +190,11 @@ export default function ProductDetail() {
             </div>
           </div>
 
-          <div className="mt-6 grid grid-cols-3 gap-3 text-center text-xs text-muted-foreground">
+          <Reveal as="div" className="mt-6 grid grid-cols-3 gap-3 text-center text-xs text-muted-foreground">
             <div className="flex flex-col items-center gap-1.5"><Sparkles className="size-5 text-accent" /> Giặt là chuyên nghiệp</div>
             <div className="flex flex-col items-center gap-1.5"><Truck className="size-5 text-accent" /> Giao nội thành nhanh</div>
             <div className="flex flex-col items-center gap-1.5"><ShieldCheck className="size-5 text-accent" /> Hoàn cọc khi trả</div>
-          </div>
+          </Reveal>
         </div>
       </div>
 
@@ -208,14 +208,14 @@ export default function ProductDetail() {
           <p className="mt-4 text-sm text-muted-foreground">Chưa có đánh giá cho thiết kế này.</p>
         ) : (
           <div className="mt-6 grid gap-5 md:grid-cols-2">
-            {reviews.map((r) => (
-              <div key={r.id} className="rounded-md border border-border bg-card p-5">
+            {reviews.map((r, i) => (
+              <Reveal key={r.id} delay={Math.min(i, 5) * 60} className="rounded-md border border-border bg-card p-5">
                 <div className="flex items-center justify-between">
                   <p className="font-medium">{r.customer?.full_name ?? 'Khách hàng'}</p>
                   <RatingStars value={r.rating} />
                 </div>
                 <p className="mt-2 text-sm text-muted-foreground">{r.comment}</p>
-              </div>
+              </Reveal>
             ))}
           </div>
         )}

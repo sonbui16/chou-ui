@@ -1,15 +1,47 @@
 import { useEffect, useState } from 'react'
-import { Link, NavLink, Outlet, useLocation } from 'react-router'
-import { Menu, ShoppingBag, User2 } from 'lucide-react'
+import { Link, NavLink, Outlet, useLocation, useNavigate } from 'react-router'
+import { Menu, Search, ShoppingBag, User2 } from 'lucide-react'
 import { useCart } from '@/store/hooks'
 import { useAuth } from '@/store/hooks'
 import { useCategories } from '@/features/catalog'
 import { Drawer } from '@/components/ui/drawer'
+import { Input } from '@/components/ui/input'
 import { ThemeToggle } from '@/components/ThemeToggle'
+import { useTypewriter } from '@/lib/useTypewriter'
 import { cn } from '@/lib/cn'
 
 const linkCls = ({ isActive }) =>
   cn('text-sm transition-colors hover:text-accent', isActive ? 'text-accent' : 'text-foreground')
+
+// Câu placeholder xoay vòng cho ô tìm kiếm — khai báo module-level để định danh ỔN ĐỊNH.
+const SEARCH_PHRASES = ['Tìm kiếm sản phẩm ...', 'Bạn cần tìm gì ... ?', 'Nhập tên sản phẩm cần tìm ...']
+
+// Ô tìm kiếm dùng chung cho header (desktop) và drawer (mobile). Enter → nhảy tới /vay?q=...
+function SearchBox({ className, onSubmitted }) {
+  const navigate = useNavigate()
+  const [term, setTerm] = useState('')
+  const placeholder = useTypewriter(SEARCH_PHRASES, { enabled: term === '' })
+  const submit = (e) => {
+    e.preventDefault()
+    const v = term.trim()
+    navigate(v ? `/vay?q=${encodeURIComponent(v)}` : '/vay')
+    setTerm('')
+    onSubmitted?.()
+  }
+  return (
+    <form onSubmit={submit} role="search" className={cn('relative', className)}>
+      <Search className="pointer-events-none absolute left-3 top-1/2 size-4 -translate-y-1/2 text-muted-foreground" />
+      <Input
+        type="search"
+        value={term}
+        onChange={(e) => setTerm(e.target.value)}
+        placeholder={placeholder}
+        aria-label="Tìm kiếm sản phẩm"
+        className="h-10 pl-9"
+      />
+    </form>
+  )
+}
 
 function Header() {
   const { count } = useCart()
@@ -32,6 +64,7 @@ function Header() {
           <span className="font-[var(--font-display)] text-2xl font-semibold">Chou</span>
           <span className="font-mono text-[0.58rem] uppercase text-accent">Dress · Atelier</span>
         </Link>
+        <SearchBox className="hidden md:block md:w-56 lg:w-72" />
         <nav className="hidden items-center gap-7 lg:flex">
           <NavLink to="/vay" className={linkCls} end>Tất cả váy</NavLink>
           {categories.map((c) => (
@@ -57,6 +90,7 @@ function Header() {
       </div>
 
       <Drawer open={open} onClose={() => setOpen(false)} side="left" title="Chou Dress">
+        <SearchBox className="mb-5" onSubmitted={() => setOpen(false)} />
         <nav className="flex flex-col gap-4" onClick={() => setOpen(false)}>
           <NavLink to="/vay" className={linkCls} end>Tất cả váy</NavLink>
           {categories.map((c) => (

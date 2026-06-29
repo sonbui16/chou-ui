@@ -43,6 +43,25 @@ export function clearTokens() {
 // Tương thích ngược: clearToken cũ giờ xoá cả hai.
 export const clearToken = clearTokens
 
+// "Lưu tài khoản": email đã lưu để tự điền lại form sau khi đăng xuất.
+// CHỈ lưu email — KHÔNG lưu mật khẩu (tránh để mật khẩu dạng thường trong trình duyệt).
+const REMEMBER_EMAIL_KEY = 'chou:remember-email'
+export function getRememberedEmail() {
+  try {
+    return localStorage.getItem(REMEMBER_EMAIL_KEY) ?? ''
+  } catch {
+    return ''
+  }
+}
+export function setRememberedEmail(email) {
+  try {
+    if (email) localStorage.setItem(REMEMBER_EMAIL_KEY, email)
+    else localStorage.removeItem(REMEMBER_EMAIL_KEY)
+  } catch {
+    /* ignore */
+  }
+}
+
 /** Lỗi API có status + code để UI hiển thị thông điệp phù hợp. */
 export class ApiError extends Error {
   constructor(status, code, message) {
