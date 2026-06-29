@@ -58,7 +58,7 @@ export default function Catalog() {
   const Filters = (
     <div className="space-y-8">
       <div>
-        <h3 className="mb-3 font-mono text-xs uppercase tracking-[0.2em] text-muted-foreground">Size</h3>
+        <h3 className="mb-3 font-mono text-xs uppercase text-muted-foreground">Size</h3>
         <div className="flex flex-wrap gap-2">
           {sizes.map((s) => (
             <button
@@ -72,7 +72,7 @@ export default function Catalog() {
         </div>
       </div>
       <div>
-        <h3 className="mb-3 font-mono text-xs uppercase tracking-[0.2em] text-muted-foreground">Màu sắc</h3>
+        <h3 className="mb-3 font-mono text-xs uppercase text-muted-foreground">Màu sắc</h3>
         <div className="flex flex-wrap gap-2">
           {colors.map((c) => (
             <button
@@ -88,7 +88,7 @@ export default function Catalog() {
         </div>
       </div>
       <div>
-        <h3 className="mb-3 font-mono text-xs uppercase tracking-[0.2em] text-muted-foreground">Giá tối đa / ngày</h3>
+        <h3 className="mb-3 font-mono text-xs uppercase text-muted-foreground">Giá tối đa / ngày</h3>
         <input type="range" min={400000} max={3000000} step={100000} value={maxPrice}
           onChange={(e) => { setMaxPrice(Number(e.target.value)); setPage(1) }} className="w-full accent-[color:var(--ink)]" />
         <p className="mt-1 font-mono text-sm">{formatNumber(maxPrice)}₫</p>

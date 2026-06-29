@@ -48,7 +48,7 @@ export function Field({ label, error, htmlFor, children, hint }) {
       {label && (
         <Label htmlFor={htmlFor} className="flex items-center justify-between">
           <span>{label}</span>
-          {hint && <span className="font-mono text-[0.65rem] uppercase tracking-wider text-muted-foreground">{hint}</span>}
+          {hint && <span className="font-mono text-[0.65rem] uppercase text-muted-foreground">{hint}</span>}
         </Label>
       )}
       {children}

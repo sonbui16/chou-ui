@@ -48,7 +48,7 @@ export default function Login() {
       <p className="mt-4 text-center text-sm text-muted-foreground">Chưa có tài khoản? <Link to="/dang-ky" className="text-accent hover:underline">Đăng ký</Link></p>
 
       <div className="my-8 border-t border-dashed hairline" />
-      <p className="mb-3 text-center font-mono text-xs uppercase tracking-[0.2em] text-muted-foreground">Đăng nhập nhanh (demo)</p>
+      <p className="mb-3 text-center font-mono text-xs uppercase text-muted-foreground">Đăng nhập nhanh (demo)</p>
       <div className="flex gap-3">
         <Button variant="outline" className="flex-1" onClick={() => quick('mai.anh@example.com', 'test123', '/tai-khoan')}>Khách hàng</Button>
       </div>

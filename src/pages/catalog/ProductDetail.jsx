@@ -136,7 +136,7 @@ export default function ProductDetail() {
           {/* appointment card (signature) */}
           <div className="mt-7 rounded-md border border-accent/60 bg-card p-6 shadow-[10px_10px_0_0_rgba(194,168,120,0.16)]">
             <div className="flex items-center justify-between">
-              <p className="font-mono text-[0.65rem] uppercase tracking-[0.25em] text-accent">Phiếu giữ váy</p>
+              <p className="font-mono text-[0.65rem] uppercase text-accent">Phiếu giữ váy</p>
               <p className="font-mono text-[0.65rem] text-muted-foreground">{variant?.sku ?? '—'}</p>
             </div>
 

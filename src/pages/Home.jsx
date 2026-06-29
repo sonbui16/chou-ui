@@ -29,7 +29,7 @@ export default function Home() {
               <br />
               cho ngày
               <br />
-              <span className="italic text-accent">trọng đại của bạn.</span>
+              <span className="italic text-accent">trọng đại của bạn</span>
             </h1>
             <p className="mt-6 max-w-md text-base text-muted-foreground">
               Váy cưới, đầm dạ hội và áo dài thiết kế — thuê theo ngày như một buổi hẹn thử đồ couture.

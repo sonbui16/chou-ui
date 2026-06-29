@@ -25,7 +25,7 @@ export default function OrderConfirmation() {
       <div className="mt-10 rounded-md border border-accent/60 bg-card p-7 shadow-[10px_10px_0_0_rgba(194,168,120,0.16)]">
         <div className="flex items-center justify-between">
           <div>
-            <p className="font-mono text-[0.65rem] uppercase tracking-[0.25em] text-accent">Mã đơn</p>
+            <p className="font-mono text-[0.65rem] uppercase text-accent">Mã đơn</p>
             <p className="font-[var(--font-display)] text-2xl">{rental.rental_no}</p>
           </div>
           <Badge tone="accent">{STATUS[rental.status]}</Badge>

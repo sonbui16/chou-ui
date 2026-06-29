@@ -9,7 +9,7 @@ import { ThemeToggle } from '@/components/ThemeToggle'
 import { cn } from '@/lib/cn'
 
 const linkCls = ({ isActive }) =>
-  cn('text-sm tracking-wide transition-colors hover:text-accent', isActive ? 'text-accent' : 'text-foreground')
+  cn('text-sm transition-colors hover:text-accent', isActive ? 'text-accent' : 'text-foreground')
 
 function Header() {
   const { count } = useCart()
@@ -20,7 +20,7 @@ function Header() {
   return (
     <header className="sticky top-0 z-40 border-b border-border bg-background/85 backdrop-blur">
       <div className="bg-ink text-ink-foreground">
-        <p className="mx-auto max-w-7xl px-4 py-1.5 text-center font-mono text-[0.82rem] uppercase tracking-[0.1em]">
+        <p className="mx-auto max-w-7xl px-4 py-1.5 text-center text-[0.82rem]">
           Miễn phí giao nội thành cho đơn từ 500.000₫ · Đặt giữ váy trước tới 90 ngày
         </p>
       </div>
@@ -30,7 +30,7 @@ function Header() {
         </button>
         <Link to="/" className="flex items-baseline gap-2">
           <span className="font-[var(--font-display)] text-2xl font-semibold">Chou</span>
-          <span className="font-mono text-[0.58rem] uppercase tracking-[0.35em] text-accent">Dress · Atelier</span>
+          <span className="font-mono text-[0.58rem] uppercase text-accent">Dress · Atelier</span>
         </Link>
         <nav className="hidden items-center gap-7 lg:flex">
           <NavLink to="/vay" className={linkCls} end>Tất cả váy</NavLink>
@@ -69,10 +69,43 @@ function Header() {
   )
 }
 
+function FacebookIcon(props) {
+  return (
+    <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true" {...props}>
+      <path d="M24 12.073C24 5.405 18.627 0 12 0S0 5.405 0 12.073C0 18.1 4.388 23.094 10.125 24v-8.437H7.078v-3.49h3.047V9.43c0-3.026 1.79-4.697 4.532-4.697 1.312 0 2.686.235 2.686.235v2.971H15.83c-1.49 0-1.955.93-1.955 1.886v2.265h3.328l-.532 3.49h-2.796V24C19.612 23.094 24 18.1 24 12.073z" />
+    </svg>
+  )
+}
+
+function TiktokIcon(props) {
+  return (
+    <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true" {...props}>
+      <path d="M19.589 6.686a4.793 4.793 0 0 1-3.77-4.245V2h-3.445v13.672a2.896 2.896 0 0 1-5.201 1.743l-.002-.001.002.001a2.895 2.895 0 0 1 3.183-4.51v-3.5a6.329 6.329 0 0 0-5.394 10.692 6.33 6.33 0 0 0 10.857-4.424V8.687a8.182 8.182 0 0 0 4.773 1.526V6.79a4.831 4.831 0 0 1-1.003-.104z" />
+    </svg>
+  )
+}
+
+const SOCIALS = [
+  {
+    name: 'Theo dõi trên Facebook',
+    href: 'https://www.facebook.com',
+    Icon: FacebookIcon,
+    // Facebook brand blue
+    className: 'bg-[#1877F2] text-white hover:bg-[#0c63d4]',
+  },
+  {
+    name: 'Theo dõi trên TikTok',
+    href: 'https://www.tiktok.com',
+    Icon: TiktokIcon,
+    // TikTok brand black
+    className: 'bg-[#010101] text-white hover:bg-[#25F4EE] hover:text-[#010101]',
+  },
+]
+
 function Footer() {
   return (
     <footer className="mt-24 border-t border-border bg-ink text-ink-foreground">
-      <div className="mx-auto grid max-w-7xl gap-10 px-4 py-14 md:grid-cols-4">
+      <div className="mx-auto grid max-w-7xl gap-10 px-4 py-14 md:grid-cols-5">
         <div className="md:col-span-2">
           <p className="font-[var(--font-display)] text-3xl">Chou Dress</p>
           <p className="mt-3 max-w-sm text-sm text-ink-foreground/70">
@@ -96,9 +129,30 @@ function Footer() {
             <li>9:00 – 20:00 mỗi ngày</li>
           </ul>
         </div>
+        <div>
+          <p className="eyebrow mb-3">Kết nối với chúng tôi</p>
+          <ul className="space-y-3 text-sm">
+            {SOCIALS.map(({ name, href, Icon, className }) => (
+              <li key={name}>
+                <a
+                  href={href}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className={cn(
+                    'flex items-center gap-3 rounded-md px-3 py-2 font-medium transition-colors',
+                    className,
+                  )}
+                >
+                  <Icon className="size-5 shrink-0" />
+                  <span>{name}</span>
+                </a>
+              </li>
+            ))}
+          </ul>
+        </div>
       </div>
       <div className="border-t border-ink-foreground/15">
-        <p className="mx-auto max-w-7xl px-4 py-5 font-mono text-[0.62rem] uppercase tracking-[0.2em] text-ink-foreground/50">
+        <p className="mx-auto max-w-7xl px-4 py-5 font-mono text-[0.62rem] uppercase text-ink-foreground/50">
           © 2026 Chou Dress
         </p>
       </div>
