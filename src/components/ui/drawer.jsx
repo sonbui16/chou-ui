@@ -1,4 +1,5 @@
 import { useEffect } from 'react'
+import { createPortal } from 'react-dom'
 import { X } from 'lucide-react'
 import { cn } from '@/lib/cn'
 
@@ -16,7 +17,9 @@ export function Drawer({ open, onClose, side = 'right', title, children, classNa
   }, [open, onClose])
 
   if (!open) return null
-  return (
+  // Portal ra body: tránh bị containing-block của ancestor có backdrop-blur/transform
+  // (vd <header backdrop-blur>) bó "fixed inset-0" lại → drawer không full chiều cao thiết bị.
+  return createPortal(
     <div className="fixed inset-0 z-50">
       <div className="absolute inset-0 bg-ink/40" onClick={onClose} />
       <div
@@ -36,7 +39,8 @@ export function Drawer({ open, onClose, side = 'right', title, children, classNa
         </div>
         <div className="flex-1 overflow-y-auto p-5">{children}</div>
       </div>
-    </div>
+    </div>,
+    document.body,
   )
 }
 

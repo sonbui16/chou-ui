@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react'
-import { Link, NavLink, Outlet, useLocation, useNavigate } from 'react-router'
+import { Link, Outlet, useLocation, useNavigate } from 'react-router'
 import { Menu, Search, ShoppingBag, User2 } from 'lucide-react'
 import { useCart } from '@/store/hooks'
 import { useAuth } from '@/store/hooks'
@@ -10,8 +10,8 @@ import { ThemeToggle } from '@/components/ThemeToggle'
 import { useTypewriter } from '@/lib/useTypewriter'
 import { cn } from '@/lib/cn'
 
-const linkCls = ({ isActive }) =>
-  cn('text-sm transition-colors hover:text-accent', isActive ? 'text-accent' : 'text-foreground')
+const linkCls = (active) =>
+  cn('text-sm transition-colors hover:text-accent', active ? 'text-accent' : 'text-foreground')
 
 // Câu placeholder xoay vòng cho ô tìm kiếm — khai báo module-level để định danh ỔN ĐỊNH.
 const SEARCH_PHRASES = ['Tìm kiếm sản phẩm ...', 'Bạn cần tìm gì ... ?', 'Nhập tên sản phẩm cần tìm ...']
@@ -48,6 +48,20 @@ function Header() {
   const { user } = useAuth()
   const { data: categories = [] } = useCategories()
   const [open, setOpen] = useState(false)
+  const { pathname, search } = useLocation()
+
+  // Tự xác định mục đang chọn theo query `cat` — vì NavLink chỉ so pathname,
+  // mà mọi mục danh mục đều trỏ về /vay nên sẽ active đồng loạt nếu dùng NavLink.
+  const activeCat = new URLSearchParams(search).get('cat')
+  const navItems = [
+    { to: '/vay', label: 'Tất cả váy', active: pathname === '/vay' && !activeCat },
+    ...categories.map((c) => ({
+      to: `/vay?cat=${c.slug}`,
+      label: c.name,
+      active: pathname === '/vay' && activeCat === c.slug,
+    })),
+    { to: '/ve-chung-toi', label: 'Câu chuyện', active: pathname === '/ve-chung-toi' },
+  ]
 
   return (
     <header className="sticky top-0 z-40 border-b border-border bg-background/85 backdrop-blur">
@@ -63,11 +77,9 @@ function Header() {
         </Link>
         <SearchBox className="hidden md:block md:w-56 lg:w-72" />
         <nav className="hidden items-center gap-7 lg:flex">
-          <NavLink to="/vay" className={linkCls} end>Tất cả váy</NavLink>
-          {categories.map((c) => (
-            <NavLink key={c.id} to={`/vay?cat=${c.slug}`} className={linkCls}>{c.name}</NavLink>
+          {navItems.map((item) => (
+            <Link key={item.to} to={item.to} className={linkCls(item.active)}>{item.label}</Link>
           ))}
-          <NavLink to="/ve-chung-toi" className={linkCls}>Câu chuyện</NavLink>
         </nav>
         <div className="flex items-center gap-4">
           <ThemeToggle className="hidden lg:block" />
@@ -92,11 +104,9 @@ function Header() {
       <Drawer open={open} onClose={() => setOpen(false)} side="left" title="Chou Dress">
         <SearchBox className="mb-5" onSubmitted={() => setOpen(false)} />
         <nav className="flex flex-col gap-4" onClick={() => setOpen(false)}>
-          <NavLink to="/vay" className={linkCls} end>Tất cả váy</NavLink>
-          {categories.map((c) => (
-            <NavLink key={c.id} to={`/vay?cat=${c.slug}`} className={linkCls}>{c.name}</NavLink>
+          {navItems.map((item) => (
+            <Link key={item.to} to={item.to} className={linkCls(item.active)}>{item.label}</Link>
           ))}
-          <NavLink to="/ve-chung-toi" className={linkCls}>Câu chuyện</NavLink>
         </nav>
       </Drawer>
     </header>
