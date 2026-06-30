@@ -166,6 +166,10 @@
 }
 .animate-fade-up { animation: fade-up 0.6s cubic-bezier(0.22, 1, 0.36, 1) both; }
 
+/* Ẩn thanh cuộn ngang cho snap-carousel (Tailwind v4 không có sẵn scrollbar-hide). */
+.no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+.no-scrollbar::-webkit-scrollbar { display: none; }
+
 /* Reveal-on-scroll — phần tử mờ + trượt lên nhẹ khi vào tầm nhìn (xem component Reveal).
    prefers-reduced-motion (ở trên) ép duration ~0 → vẫn hiện đủ nội dung, không chuyển động. */
 .reveal {

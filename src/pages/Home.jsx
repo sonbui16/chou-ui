@@ -21,7 +21,32 @@ export default function Home() {
     <div>
       {/* HERO */}
       <section className="relative overflow-hidden border-b border-border glow-champagne">
-        <div className="mx-auto grid max-w-7xl items-stretch gap-0 px-4 py-12 md:py-16 lg:grid-cols-[1.1fr_0.9fr] lg:gap-12">
+        {/* Mobile: snap-carousel ảnh featured + text overlay cố định */}
+        <div className="relative lg:hidden">
+          <div className="no-scrollbar flex snap-x snap-mandatory overflow-x-auto">
+            {(isLoading ? Array.from({ length: 3 }) : featured.slice(0, 5)).map((p, i) => (
+              <div key={p?.id ?? i} className="aspect-[3/4] w-full shrink-0 snap-center bg-cream">
+                {isLoading ? (
+                  <Skeleton className="size-full" />
+                ) : (
+                  <ImageWithFallback src={p?.primary_image} alt={p?.name ?? 'Váy'} className="size-full" />
+                )}
+              </div>
+            ))}
+          </div>
+          <div className="pointer-events-none absolute inset-0 flex flex-col justify-end bg-gradient-to-t from-ink/75 via-ink/30 to-transparent p-6">
+            <p className="eyebrow mb-3 text-ink-foreground/80">Atelier cho thuê váy · Mùa cưới 2026</p>
+            <h1 className="text-4xl leading-[1.02] text-ink-foreground sm:text-5xl">
+              Vẻ đẹp cho ngày <span className="italic text-accent">trọng đại của bạn</span>
+            </h1>
+            <div className="pointer-events-auto mt-6 flex flex-wrap gap-3">
+              <LinkButton to="/vay">Xem bộ sưu tập <ArrowRight className="size-4" /></LinkButton>
+              <LinkButton to="/vay?cat=vay-cuoi" variant="outline">Váy cưới</LinkButton>
+            </div>
+          </div>
+        </div>
+        {/* Desktop: giữ nguyên layout 2 cột */}
+        <div className="mx-auto hidden max-w-7xl items-stretch gap-0 px-4 py-12 md:py-16 lg:grid lg:grid-cols-[1.1fr_0.9fr] lg:gap-12">
           <Reveal className="flex flex-col justify-center">
             <p className="eyebrow mb-5">Atelier cho thuê váy · Mùa cưới 2026</p>
             <h1 className="text-5xl leading-[0.98] sm:text-6xl lg:text-7xl">
@@ -62,7 +87,7 @@ export default function Home() {
 
       {/* CATEGORIES */}
       <section className="mx-auto max-w-7xl px-4 py-16">
-        <Reveal><SectionHeading eyebrow="Theo từng dịp" title="Bạn đang chuẩn bị cho điều gì?" /></Reveal>
+        <Reveal><SectionHeading eyebrow="Theo từng dịp" title="Danh mục" /></Reveal>
         <div className="mt-8 grid grid-cols-2 gap-4 lg:grid-cols-4">
           {categories.map((c, i) => {
             const sample = featured.find((p) => p.category?.id === c.id) ?? featured[0]

@@ -57,9 +57,6 @@ function Header() {
         </p>
       </div>
       <div className="mx-auto flex max-w-7xl items-center justify-between gap-4 px-4 py-4">
-        <button className="lg:hidden" onClick={() => setOpen(true)} aria-label="Mở menu">
-          <Menu className="size-6" />
-        </button>
         <Link to="/" className="flex items-baseline gap-2">
           <span className="font-[var(--font-display)] text-2xl font-semibold">Chou</span>
           <span className="font-mono text-[0.58rem] uppercase text-accent">Dress · Atelier</span>
@@ -73,7 +70,7 @@ function Header() {
           <NavLink to="/ve-chung-toi" className={linkCls}>Câu chuyện</NavLink>
         </nav>
         <div className="flex items-center gap-4">
-          <ThemeToggle />
+          <ThemeToggle className="hidden lg:block" />
           <Link to={user ? '/tai-khoan' : '/dang-nhap'} className="flex items-center gap-1.5 hover:text-accent" aria-label="Tài khoản">
             <User2 className="size-5" />
             <span className="hidden text-sm sm:inline">{user ? user.full_name.split(' ').slice(-1) : 'Đăng nhập'}</span>
@@ -86,6 +83,9 @@ function Header() {
               </span>
             )}
           </Link>
+          <button className="lg:hidden" onClick={() => setOpen(true)} aria-label="Mở menu">
+            <Menu className="size-6" />
+          </button>
         </div>
       </div>
 
